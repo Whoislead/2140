@@ -6,10 +6,8 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.JOptionPane;
-import java.awt.event.FocusEvent;
 import javax.swing.JPasswordField;
 import java.awt.event.ActionEvent;
-import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.awt.event.ActionListener;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
@@ -40,21 +38,16 @@ public class GUI{
         mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         loginButton.addActionListener(new loginButtonListener());
-
+                
         textFields.add(usernameTextField);
         textFields.add(passwordTextField);
-
-        textHider tHider = new textHider();
-
-        usernameTextField.addFocusListener(tHider);
-        passwordTextField.addFocusListener(tHider);
 
         setLoginFrame();   
     }
 
     private void setLoginFrame(){
         setLoginPane();
-        mainFrame.setTitle("Login");
+        mainFrame.setTitle("Hardware Management System");
         mainFrame.setSize(240, 135);
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setContentPane(contentPane);
@@ -96,14 +89,12 @@ public class GUI{
         buttonPanel.add(loginButton);
     }
 
-    public void setMainFrame() {
+    private void setMainFrame() {
         mainFrame.setTitle("Hardware Management System");
         mainFrame.setSize(960, 540);
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setVisible(true);
     }
-
-    //As more text fields are added, add them to the textHider class
 
     private class loginButtonListener implements ActionListener{
 
@@ -116,39 +107,9 @@ public class GUI{
                     !String.valueOf(passwordTextField.getPassword()).equals("Testpassword")){
                 JOptionPane.showMessageDialog(new JFrame(), "The password or username is invalid",//Pane displayed when all 
                 "Invalid Input", JOptionPane.WARNING_MESSAGE);
-            }
-            else{
+            }else{
                 JOptionPane.showMessageDialog(new JFrame(), "Welcome *User's name or username will be displayed here*",//Pane displayed when all 
                 "Successful Login", JOptionPane.WARNING_MESSAGE);
-            }
-        } 
-    }
-
-    private class textHider implements FocusListener{
-
-        JTextField src = new JTextField();
-
-        @Override
-        public void focusGained(FocusEvent event){
-            src = (JTextField)event.getSource();
-            if(src.getText().equals(defaultData)){
-                for(JTextField field:textFields){
-                    if(src == field){
-                        field.setText("");
-                    }
-                }
-            }
-        }
-
-        @Override
-        public void focusLost(FocusEvent event) {
-            src = (JTextField)event.getSource();
-            if(src.getText().equals("")){
-                for(JTextField field:textFields){
-                    if(src == field){
-                        field.setText(defaultData);
-                    }
-                }
             }
         } 
     }

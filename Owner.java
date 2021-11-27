@@ -7,11 +7,11 @@ public class Owner extends Person{
     private boolean Profit_Loss;
     private double totalExpenses;
 
-    Owner(String Username, String Password, String Name, int idNumber, int Age, int Income,
-            String Position, String phoneNumber, String emailAddresString, ArrayList<Inventory> inventoryList,
+    Owner(String Username, String Password, String Name, int idNumber, int Age,String Position, 
+            String phoneNumber, String emailAddressString, String Address, ArrayList<Inventory> inventoryList,
             ArrayList<Customer> customersList, ArrayList<Double> Expenses, String expensesName, boolean Profit_Loss, 
             double totalExpenses) {
-        super(Username, Password, Name, idNumber, Age, Income, Position, phoneNumber, emailAddresString, inventoryList,
+                super(Username, Password, Name, idNumber, Age, Position, phoneNumber, emailAddressString, Address, inventoryList,
                 customersList);
         setExpenses(Expenses);
         setExpensesName(expensesName);
