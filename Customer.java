@@ -6,13 +6,15 @@ public class Customer {
     private String Address;
     private String emailAddress;
     private String phoneNumber;
+    private String idNum;
     private ArrayList<Order> Orders;
 
-    Customer(String Name, String Address, String emailAddress, String phoneNumber, ArrayList<Order> Orders){
+    Customer(String Name, String Address, String emailAddress, String phoneNumber, String idNum, ArrayList<Order> Orders){
         this.Name = Name;
         this.Address = Address;
         this.emailAddress = emailAddress;
         this.phoneNumber = phoneNumber;
+        this.idNum = idNum;
         this.Orders = Orders;
     }
 
@@ -46,6 +48,14 @@ public class Customer {
 
     void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+    
+    public String getIdNum() {
+        return idNum;
+    }
+
+    void setIdNum(String idNum) {
+        this.idNum = idNum;
     }
 
     public ArrayList<Order> getOrders() {
