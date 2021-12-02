@@ -100,6 +100,11 @@ public class SearchforItemJFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
+      private void closeBTActionPerformed(java.awt.event.ActionEvent evt) {                                        
+        // TODO add your handling code here:
+        dispose();
+    }                               
 
     /**
      * @param args the command line arguments
