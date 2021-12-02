@@ -96,8 +96,34 @@ public class Inventory {
   
     }
 
-  public boolean changeInfo(){
+  public boolean changeInfo(String oldData, String newData){
+
+    File updateFile = new File ("Inventory.txt");
+
+    if (updateFile.exists() && updateFile.canRead()) { 
+
+      BufferedReader read = new BufferedReader(new FileReader(updateFile));
+      FileWriter newFile = new Filewriter(updateFile);
+      String aLine = read.readLine();
+
+      while (aLine != null){
+        String previous = "" + aLine + System.lineSeparator();
+        line = reader.readLine();
+      }
+
+      String changedinfo = previous.replaceAll(oldData, newData);
+      newfile.write(changedinfo);
+
+
+      read.close();
+      newFile.close();
+       
+    }
+
+
+    return false;
 
   }
+
 
 }
