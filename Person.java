@@ -5,7 +5,7 @@ public class Person {
     protected String Username;
     protected String Password;
     protected String Name;
-    protected int idNumber;
+    protected String idNumber;
     protected int Age;
     protected String Position;
     protected String Address;
@@ -15,7 +15,7 @@ public class Person {
     protected ArrayList<Customer> customerList;
     //Customer and Inventory ArrayList to be added when implemented
 
-    Person(String Username, String Password, String Name, int idNumber, int Age, 
+    Person(String Username, String Password, String Name, String idNumber, int Age, 
             String Position, String phoneNumber, String emailAddressString, String Address,
             ArrayList<Inventory> inventoryList, ArrayList<Customer> customersList){
         this.Username = Username;
@@ -27,6 +27,8 @@ public class Person {
         this.emailAddress = emailAddressString;
         this.inventoryList = inventoryList;
         this.customerList = customersList;
+        this.Address = Address;
+        this.idNumber = idNumber;
     }
 
     public String getUsername() {
@@ -61,11 +63,11 @@ public class Person {
         this.Name = name;
     }
 
-    public int getIdNumber() {
+    public String getIdNumber() {
         return idNumber;
     }
 
-    void setIdNumber(int idNumber) {
+    void setIdNumber(String idNumber) {
         this.idNumber = idNumber;
     }
 

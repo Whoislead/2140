@@ -1,17 +1,36 @@
 import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Insets;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-
+import javax.swing.JTable;
+import java.awt.GridLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Scanner;
+import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.Comparator;
+
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
 
 public class GUI{
@@ -19,11 +38,9 @@ public class GUI{
 
     private JButton loginButton = new JButton("Login");
     private JButton orderButton = new JButton("Order");
-    private JButton customerDataButton = new JButton("<html><center>"+"Customer Date"+"<br>"+"Collection"+"</center></html>");
-    private JButton addInventoryButton = new JButton("Add To Inventory");
-    private JButton deleteInventoryButton = new JButton("Delete From Inventory");
-    private JButton addEmployeeButton = new JButton("Add Employee");
-    private JButton removeEmployeeButton = new JButton("Remove Employee");
+    private JButton customerDataButton = new JButton("<html><center>"+"Customer Data"+"<br>"+"Collection"+"</center></html>");
+    private JButton manageInventoryButton = new JButton("Mangage Inventory");
+    private JButton manageEmployeeButton = new JButton("Manage Employee");
     private JButton employeeButton = new JButton("Employee");
     private JButton ownerButton = new JButton("Owner");
     private JButton backButton = new JButton("Back");
@@ -31,6 +48,11 @@ public class GUI{
     private JLabel usernameLabel = new JLabel("Username");
     private JLabel passwordLabel = new JLabel("Password");
     private JLabel menuLabel = new JLabel();
+    private JLabel testLabel = new JLabel();
+
+    private ArrayList<Employee> employees = new ArrayList<Employee>();
+	private ArrayList<Customer> customers = new ArrayList<Customer>();
+    private ArrayList<Inventory> items = new ArrayList<Inventory>();
 
     private SpringLayout layout = new SpringLayout();
 
@@ -38,14 +60,11 @@ public class GUI{
 
     private JTextField usernameTextField = new JTextField(15);
     private JPasswordField passwordTextField = new JPasswordField(15);
-
-    private String passwordString;
-    private String usernameString;
-    private String defaultData = "Enter input here!";
-
+    
     menuBack mBack = new menuBack();
-
+    manageEmployeeButtonListener mEMp = new manageEmployeeButtonListener();
     employeeMenuBack_ownerMenuBack emp_ownBack = new employeeMenuBack_ownerMenuBack();
+    manageInventoryButtonListener mInv = new manageInventoryButtonListener();
 
     GUI(){
         mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -57,13 +76,72 @@ public class GUI{
         employeeButton.addActionListener(new employeeButtonListener());
         ownerButton.addActionListener(new ownerButtonListener());
         // customerDataButton.addActionListener(l);
-        // addInventoryButton.addActionListener(l);
-        // addEmployeeButton.addActionListener(l);
-        // deleteInventoryButton.addActionListener(l);
-        // removeEmployeeButton.addActionListener(l);
+        manageInventoryButton.addActionListener(mInv);
+        manageEmployeeButton.addActionListener(mEMp);
+        
+
+
+
+        File efile = new File("2140/EmployeeCredentials.txt");
+        try
+        {
+            efile.createNewFile();
+        }catch(IOException ioe)
+        {}
+
+        loadData();
 
         setLoginFrame();   
     }
+
+    public void loadData()
+	{
+		clearData();    
+        this.employees = loadEmployees("2140/EmployeeCredentials.txt", this.customers, this.items);
+
+	}
+
+    public void clearData()
+        {
+            employees.clear();
+        //customers.clear();
+        }
+
+    public ArrayList<Employee> loadEmployees(String efile, ArrayList<Customer> customers, ArrayList<Inventory> items)
+	{
+		Scanner escan = null;
+		ArrayList<Employee> elist = new ArrayList<Employee>();
+        try
+		{
+            escan  = new Scanner(new File(efile));
+            while(escan.hasNextLine())
+			{
+				String [] nextLine = escan.nextLine().split(";");
+				String Uname = nextLine[0];
+                String password = nextLine[1];
+                String name = nextLine[2];
+                String IDnum = nextLine[3];
+				int iage = Integer.parseInt(nextLine[4]);
+                String pos = nextLine[5];
+                String phNum = nextLine[6];
+                String eAddr = nextLine[7];
+                String addr = nextLine[8];
+                double Salary = Double.parseDouble(nextLine[9]);
+				Employee e = new Employee(Uname, password, name, IDnum, iage, pos, phNum, eAddr, addr, items, customers, Salary);
+				elist.add(e);
+			}
+
+			escan.close();
+            
+		}
+		catch(IOException e)
+		{}
+		catch(NumberFormatException nfe)
+		{}
+
+		return elist;
+
+	}
 
     private void removeListeners(JButton button, ActionListener[] actLst){
         for(ActionListener act:actLst){
@@ -84,6 +162,7 @@ public class GUI{
         contentPane.removeAll();
         contentPane.setLayout(layout);
         contentPane.add(loginButton);
+        contentPane.add(testLabel);
         contentPane.add(usernameLabel);
         contentPane.add(passwordLabel);
         contentPane.add(usernameTextField);
@@ -180,47 +259,50 @@ public class GUI{
         contentPane.removeAll();
         contentPane.add(menuLabel);
         contentPane.add(backButton);
-        contentPane.add(addInventoryButton);
-        contentPane.add(removeEmployeeButton);
-        contentPane.add(addEmployeeButton);
-        contentPane.add(deleteInventoryButton);
+        contentPane.add(manageInventoryButton);
+        contentPane.add(manageEmployeeButton);
 
         layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, menuLabel, 0, SpringLayout.HORIZONTAL_CENTER, contentPane);
         layout.putConstraint(SpringLayout.NORTH, menuLabel, 12, SpringLayout.NORTH, contentPane);
 
-        layout.putConstraint(SpringLayout.NORTH, addInventoryButton, 6, SpringLayout.SOUTH, menuLabel);
-        layout.putConstraint(SpringLayout.EAST, addInventoryButton, -6, SpringLayout.WEST, menuLabel);
+        layout.putConstraint(SpringLayout.NORTH, manageInventoryButton, 6, SpringLayout.SOUTH, menuLabel);
+        layout.putConstraint(SpringLayout.EAST, manageInventoryButton, -6, SpringLayout.WEST, menuLabel);
 
-        layout.putConstraint(SpringLayout.NORTH, deleteInventoryButton, 6, SpringLayout.SOUTH, menuLabel);
-        layout.putConstraint(SpringLayout.WEST, deleteInventoryButton, 6, SpringLayout.EAST, menuLabel);
+        layout.putConstraint(SpringLayout.NORTH, manageEmployeeButton, 6, SpringLayout.SOUTH, menuLabel);
+        layout.putConstraint(SpringLayout.WEST, manageEmployeeButton, 6, SpringLayout.EAST, menuLabel);
 
-        layout.putConstraint(SpringLayout.NORTH, addEmployeeButton, 6, SpringLayout.SOUTH, addInventoryButton);
-        layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, addEmployeeButton, 0, SpringLayout.HORIZONTAL_CENTER, addInventoryButton);
-
-        layout.putConstraint(SpringLayout.NORTH, removeEmployeeButton, 6, SpringLayout.SOUTH, deleteInventoryButton);
-        layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, removeEmployeeButton, 0, SpringLayout.HORIZONTAL_CENTER, deleteInventoryButton);
-
-        layout.putConstraint(SpringLayout.NORTH, backButton, 12, SpringLayout.SOUTH, removeEmployeeButton);
+        layout.putConstraint(SpringLayout.NORTH, backButton, 12, SpringLayout.SOUTH, manageEmployeeButton);
         layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, backButton, 0, SpringLayout.HORIZONTAL_CENTER, menuLabel);
 
         mainFrame.setVisible(true);
+    }
+
+    private boolean notCredentials(String user, String pass){
+        for(Employee emp: employees){
+            if((user+pass).equals(emp.getUsername()+emp.getPassword()) ){
+                return false;
+            }
+        }
+        return true;
     }
 
     private class loginButtonListener implements ActionListener{
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            // if(usernameTextField.getText().equals("") || String.valueOf(passwordTextField.getPassword()).equals("")){
-            //     JOptionPane.showMessageDialog(new JFrame(), "Please ensure all test field are filled!",//Pane displayed when all 
-            //     "Invalid Input", JOptionPane.WARNING_MESSAGE);
-            // }else if(!usernameTextField.getText().equals("Testusername") || 
-            //         !String.valueOf(passwordTextField.getPassword()).equals("Testpassword")){
-            //     JOptionPane.showMessageDialog(new JFrame(), "The password or username is invalid",//Pane displayed when all 
-            //     "Invalid Input", JOptionPane.WARNING_MESSAGE);
-            // }else{
-            //     JOptionPane.showMessageDialog(new JFrame(), "Welcome *User's name or username will be displayed here*",//Pane displayed when all 
-            //     "Successful Login", JOptionPane.WARNING_MESSAGE);
-            // }
+            if(usernameTextField.getText().equals("") || String.valueOf(passwordTextField.getPassword()).equals("")){
+                JOptionPane.showMessageDialog(new JFrame(), "Please ensure all text field are filled!",//Pane displayed when all 
+                "Invalid Input", JOptionPane.WARNING_MESSAGE);
+            }else if(notCredentials(usernameTextField.getText(), String.valueOf(passwordTextField.getPassword()))){
+                JOptionPane.showMessageDialog(new JFrame(), "The password or username is invalid",//Pane displayed when all 
+                "Invalid Input", JOptionPane.WARNING_MESSAGE);
+            }else{
+                JOptionPane.showMessageDialog(new JFrame(), "Welcome " + usernameTextField.getText(),//Pane displayed when all 
+                "Successful Login", JOptionPane.WARNING_MESSAGE);
+                usernameTextField.setText("");
+                passwordTextField.setText("");
+                setMainMenu();
+            }
             setMainMenu();
         } 
     }
@@ -275,7 +357,7 @@ public class GUI{
         
     }
 
-    private class addInventoryButtonListener implements ActionListener{
+    private class manageInventoryButtonListener implements ActionListener{
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -285,31 +367,11 @@ public class GUI{
         
     }
 
-    private class addEmployeeButtonListener implements ActionListener{
+    private class manageEmployeeButtonListener implements ActionListener{
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            // TODO Auto-generated method stub
-            
-        }
-        
-    }
-
-    private class deleteInventoryButtonListener implements ActionListener{
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            // TODO Auto-generated method stub
-            
-        }
-        
-    }
-
-    private class removeEmployeeButtonListener implements ActionListener{
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            // TODO Auto-generated method stub
+            new EmployeeMngScreen(employees);
             
         }
         
