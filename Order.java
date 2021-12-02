@@ -4,13 +4,15 @@ public class Order {
     
     private String employeeName;
     private String employeeID;
+    private int orderNum;
     private ArrayList<Double> price;
     private ArrayList<Integer> Quantity;
     private ArrayList<String> itemname;
 
-    Order(String employeeName, String employeeID, ArrayList<Double> price, ArrayList<Integer> Quantity, ArrayList<String> itemName){
+    Order(String employeeName, String employeeID,int orderNum, ArrayList<Double> price, ArrayList<Integer> Quantity, ArrayList<String> itemName){
         this.employeeName = employeeName;
         this.employeeID = employeeID;
+        this.orderNum = orderNum;
         this.price = price;
         this.Quantity = Quantity;
         this.itemname = itemName;
@@ -30,6 +32,14 @@ public class Order {
 
     void setEmployeeID(String employeeID) {
         this.employeeID = employeeID;
+    }
+    
+    public int getorderNum() {
+        return orderNum;
+    }
+
+    void setorderNum(int orderNum) {
+        this.orderNum = orderNum;
     }
 
     public ArrayList<Double> getPrice() {
