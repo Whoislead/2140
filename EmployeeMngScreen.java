@@ -301,7 +301,7 @@ public class EmployeeMngScreen extends JFrame
         {
             try
             {
-                saveFile(elist,"EmployeeCredentials.txt");
+                saveFile(elist,"2140/EmployeeCredentials.txt");
                 JOptionPane.showMessageDialog(EScreen, "Changes have been saved!");
             }catch(Exception ex)
             {

@@ -72,7 +72,6 @@ public class GUI{
 
         contentPane.setLayout(layout);
 
-        loginButton.addActionListener(new loginButtonListener());
         employeeButton.addActionListener(new employeeButtonListener());
         ownerButton.addActionListener(new ownerButtonListener());
         // customerDataButton.addActionListener(l);
@@ -159,16 +158,16 @@ public class GUI{
     }
 
     private void setLoginPane(){
+        removeListeners(backButton, backButton.getActionListeners());
+        loginButton.addActionListener(new loginButtonListener());
+
         contentPane.removeAll();
         contentPane.setLayout(layout);
         contentPane.add(loginButton);
-        contentPane.add(testLabel);
         contentPane.add(usernameLabel);
         contentPane.add(passwordLabel);
         contentPane.add(usernameTextField);
         contentPane.add(passwordTextField);
-
-        contentPane.validate();
 
         layout.putConstraint(SpringLayout.NORTH, usernameTextField, 6, SpringLayout.NORTH, contentPane);
         layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, usernameTextField, 0, SpringLayout.HORIZONTAL_CENTER, contentPane);
@@ -286,6 +285,15 @@ public class GUI{
         return true;
     }
 
+    private boolean notCredentials(String pass){
+        for(Employee emp: employees){
+            if((pass+"Owner").equals(emp.getPassword()+emp.getPosition())){
+                return false;
+            }
+        }
+        return true;
+    }
+
     private class loginButtonListener implements ActionListener{
 
         @Override
@@ -321,10 +329,62 @@ public class GUI{
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            setOwnerMenu();
+            mainFrame.setVisible(false);
+            mainFrame.setTitle("Owner Login");
+            menuLabel.setText("Owner Login");
+            contentPane.removeAll();
+            contentPane.setLayout(layout);
+
+            removeListeners(loginButton, loginButton.getActionListeners());
+            loginButton.addActionListener(new managerLoginButtonListener());
+
+            removeListeners(backButton, backButton.getActionListeners());
+            backButton.addActionListener(emp_ownBack);
+            backButton.setText("Back");
+
+            contentPane.add(loginButton);
+            contentPane.add(backButton);
+            contentPane.add(menuLabel);
+            contentPane.add(passwordLabel);
+            contentPane.add(passwordTextField);
+        
+            layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, menuLabel, 0, SpringLayout.HORIZONTAL_CENTER, contentPane);
+            layout.putConstraint(SpringLayout.NORTH, menuLabel, 12, SpringLayout.NORTH, contentPane);
+
+            layout.putConstraint(SpringLayout.NORTH, passwordTextField, 6, SpringLayout.SOUTH, menuLabel);
+            layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, passwordTextField, 0, SpringLayout.HORIZONTAL_CENTER, menuLabel);
+    
+            layout.putConstraint(SpringLayout.NORTH, passwordLabel, 0, SpringLayout.NORTH, passwordTextField);
+            layout.putConstraint(SpringLayout.EAST, passwordLabel, -6, SpringLayout.WEST, passwordTextField);
             
+            layout.putConstraint(SpringLayout.EAST, loginButton, -6, SpringLayout.HORIZONTAL_CENTER, menuLabel);
+            layout.putConstraint(SpringLayout.NORTH, loginButton, 6, SpringLayout.SOUTH, passwordTextField);
+
+            layout.putConstraint(SpringLayout.WEST, backButton, 6, SpringLayout.HORIZONTAL_CENTER, menuLabel);
+            layout.putConstraint(SpringLayout.NORTH, backButton, 6, SpringLayout.SOUTH, passwordTextField);
+            mainFrame.setVisible(true);
         }
         
+    }
+
+    private class managerLoginButtonListener implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if(String.valueOf(passwordTextField.getPassword()).equals("")){
+                JOptionPane.showMessageDialog(new JFrame(), "Please ensure that the password is entered!",//Pane displayed when all 
+                "Invalid Input", JOptionPane.WARNING_MESSAGE);
+            }else if(notCredentials(String.valueOf(passwordTextField.getPassword()))){
+                JOptionPane.showMessageDialog(new JFrame(), "The password or username is invalid",//Pane displayed when all 
+                "Invalid Input", JOptionPane.WARNING_MESSAGE);
+            }else{
+                JOptionPane.showMessageDialog(new JFrame(), "Welcome",//Pane displayed when all 
+                "Successful Login", JOptionPane.WARNING_MESSAGE);
+                passwordTextField.setText("");
+                setOwnerMenu();
+            }
+        }
+
     }
 
     private class menuBack implements ActionListener{
