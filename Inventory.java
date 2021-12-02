@@ -33,24 +33,11 @@ public class Inventory {
   }
 
   public String toString(){
-    String result = "There are " + this.Quantity + this.Name +  " and each is sold for $ " + this.Price()+".\n";
+    String result = "There are " + this.Quantity + this.Name +  " and each is sold for $ " + this.Price+".\n";
 		return result;
   }
 
-  void createfile(){
-    try {
-    File obj = new File("Inventory.txt");
-    invent = obj.createNewFile(); 
-    if (invent) {
-      System.out.println("File has been created");
-      } else {
-        System.out.println("File already exists!");
-      }
-    } catch (IOException e) {
-      System.out.println("ERROR!");
-      e.printStackTrace();
-    }
-  }
+  
 
   public boolean addItem(String itemname, int amount, double cost){
 
@@ -69,11 +56,12 @@ public class Inventory {
     }        
 
     return false;
-    }
+  }
 
-    public boolean removeItem(String itemname){  
-      File stock = new File("Inventory.txt");
-      if (stock.exists() && stock.canRead()) {
+  public boolean removeItem(String itemname){  
+    File stock = new File("Inventory.txt");
+    if (stock.exists() && stock.canRead()) {
+      try{
         File temp = new File("AlternateInventory.txt");
         BufferedReader read = new BufferedReader(new FileReader(stock));
         BufferedWriter change = new BufferedWriter(new FileWriter(temp));
@@ -85,42 +73,52 @@ public class Inventory {
 
           change.write(currentLine);
         }
+
         change.close(); 
         read.close(); 
         boolean successful = temp.renameTo(stock);
-        return successful;   
+        return successful;  
 
-      }
+      }catch (IOException e) {
+        System.out.println("ERROR!");
+        e.printStackTrace();
+      } 
 
-      return false;
-  
     }
+
+    return false;
+  
+  }
 
   public boolean changeInfo(String oldData, String newData){
 
     File updateFile = new File ("Inventory.txt");
 
     if (updateFile.exists() && updateFile.canRead()) { 
+      try {
+        BufferedReader read = new BufferedReader(new FileReader(updateFile));
+        FileWriter newFile = new FileWriter(updateFile);
+        String aLine = read.readLine();
+        String previous = "";
 
-      BufferedReader read = new BufferedReader(new FileReader(updateFile));
-      FileWriter newFile = new Filewriter(updateFile);
-      String aLine = read.readLine();
+        while (aLine != null){
+          previous = previous + aLine + System.lineSeparator();
+          aLine = read.readLine();
+        }
 
-      while (aLine != null){
-        String previous = "" + aLine + System.lineSeparator();
-        line = reader.readLine();
+        String changedinfo = previous.replaceAll(oldData, newData);
+        newFile.write(changedinfo);
+
+
+       read.close();
+       newFile.close();
+      }
+      catch (IOException e) {
+        System.out.println("ERROR!");
+        e.printStackTrace();
       }
 
-      String changedinfo = previous.replaceAll(oldData, newData);
-      newfile.write(changedinfo);
-
-
-      read.close();
-      newFile.close();
-       
     }
-
-
     return false;
 
   }
