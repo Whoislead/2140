@@ -5,11 +5,10 @@ public class Inventory {
     private Double Price;
     private int faultyAmount;
 
-    Inventory(String Name, int Quantity, Double Price, int faultyAmount){
+    Inventory(String Name, int Quantity, Double Price){
         this.Name = Name;
         this.Quantity = Quantity;
         this.Price = Price;
-        this.faultyAmount = faultyAmount;
     }
 
     public String getName() {
@@ -36,11 +35,4 @@ public class Inventory {
         this.Price = price;
     }
 
-    public int getFaultyAmount() {
-        return faultyAmount;
-    }
-
-    void setFaultyAmount(int faultyAmount) {
-        this.faultyAmount = faultyAmount;
-    }
 }
