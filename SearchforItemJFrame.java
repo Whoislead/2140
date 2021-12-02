@@ -55,6 +55,11 @@ public class SearchforItemJFrame extends javax.swing.JFrame {
         jScrollPane1.setViewportView(SearchTable);
 
         closeBT.setText("Finish");
+        closeBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                closeBTActionPerformed(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel2.setText("ITEM  SEARCH");
@@ -100,11 +105,11 @@ public class SearchforItemJFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
-      private void closeBTActionPerformed(java.awt.event.ActionEvent evt) {                                        
+
+    private void closeBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeBTActionPerformed
         // TODO add your handling code here:
         dispose();
-    }                               
+    }//GEN-LAST:event_closeBTActionPerformed
 
     /**
      * @param args the command line arguments
