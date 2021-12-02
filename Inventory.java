@@ -24,7 +24,7 @@ public class Inventory {
   }
 
 
-  public Double getPrice() {
+  public double getPrice() {
     return Price;
   }
 
@@ -34,7 +34,7 @@ public class Inventory {
 
   public String toString(){
     String result = "There are " + this.Quantity + this.Name +  " and each is sold for $ " + this.Price+".\n";
-		return result;
+    return result;
   }
 
   
