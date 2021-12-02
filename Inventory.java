@@ -3,7 +3,9 @@ public class Inventory {
   private int Quantity;
   private double Price;
   
-
+   public Inventory(){
+    this.Price = 0;
+  }
 
   public Inventory(String Name, int Quantity, double Price){
     this.Name = Name;
