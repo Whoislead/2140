@@ -33,11 +33,24 @@ public class Inventory {
   }
 
   public String toString(){
-    String result = this.Name + " has a quantity of  " + this.Quantity + " and is sold for " + this.Price() + "each";
-    return result;
+    String result = "There are " + this.Quantity + this.Name +  " and each is sold for $ " + this.Price()+".\n";
+		return result;
   }
 
- 
+  void createfile(){
+    try {
+    File obj = new File("Inventory.txt");
+    invent = obj.createNewFile(); 
+    if (invent) {
+      System.out.println("File has been created");
+      } else {
+        System.out.println("File already exists!");
+      }
+    } catch (IOException e) {
+      System.out.println("ERROR!");
+      e.printStackTrace();
+    }
+  }
 
   public boolean addItem(String itemname, int amount, double cost){
 
@@ -45,17 +58,17 @@ public class Inventory {
     if (stock.exists()) {
       try{
         FileWriter addinfo = new FileWriter("Inventory.txt");
-        Inventory iteminfo = new  Inventory(itemname, amount, cost)
-        addinfo.write( iteminfo.toString())
-        addinfo.close()
-        return true 
+        Inventory iteminfo = new  Inventory(itemname, amount, cost);
+        addinfo.write( iteminfo.toString());
+        addinfo.close();
+        return true; 
       } catch (IOException e) {
         System.out.println("ERROR!");
         e.printStackTrace();
       }
     }        
 
-    return false
+    return false;
     }
 
     public boolean removeItem(String itemname){  
@@ -63,7 +76,7 @@ public class Inventory {
       if (stock.exists() && stock.canRead()) {
         File temp = new File("AlternateInventory.txt");
         BufferedReader read = new BufferedReader(new FileReader(stock));
-        BufferedWriter change = new BufferedWriter(new FileWriter(temp);
+        BufferedWriter change = new BufferedWriter(new FileWriter(temp));
 
         String currentLine;
 
@@ -111,6 +124,5 @@ public class Inventory {
     return false;
 
   }
-
 
 }
