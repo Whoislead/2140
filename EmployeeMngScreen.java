@@ -57,6 +57,7 @@ public class EmployeeMngScreen extends JFrame
     {
         
         EScreen = this;
+        
         setTitle("Managing Employee Details");
 
         pnlCommand = new JPanel();
@@ -68,7 +69,8 @@ public class EmployeeMngScreen extends JFrame
                 "Age",
                 "Phone Number",
                 "Address",
-                "Email Address",};
+                "Email Address",
+                "Salary"};
         model=new DefaultTableModel(columnNames,0);
         table = new JTable(model);
         showTable(elist);
@@ -82,6 +84,8 @@ public class EmployeeMngScreen extends JFrame
        
         pnlDisplay.add(scrollPane);
 
+
+        
         cmdAddEmployee  = new JButton("Add/Create Employee");
         cmdSortName  = new JButton("Sort by Name");
         cmdClose   = new JButton("Close");
@@ -169,7 +173,6 @@ public class EmployeeMngScreen extends JFrame
         add(pnlDisplay, BorderLayout.CENTER);
         add(pnlCommand, BorderLayout.SOUTH);
         pack();
-        setLocationRelativeTo(null);
         setVisible(true);
     }
 
@@ -187,7 +190,7 @@ public class EmployeeMngScreen extends JFrame
 
     private void addToTable(Employee e)
     { 
-        String[] item={""+ e.getIdNumber(),""+e.getName(),""+ e.getAge(), ""+e.getPhoneNumber(), ""+e.getAddress(), ""+e.getEmailAddress()};
+        String[] item={""+ e.getIdNumber(),""+e.getName(),""+ e.getAge(), ""+e.getPhoneNumber(), ""+e.getAddress(), ""+e.getEmailAddress(), ""+e.getSalary()};
         model.addRow(item);        
 
     }
@@ -223,7 +226,7 @@ public class EmployeeMngScreen extends JFrame
     }
     
 
-    public void updateEmployeeinfo(int edx, String name, int age, String addr, String eaddr, String phnum)
+    public void updateEmployeeinfo(int edx, String name, int age, String addr, String eaddr, String phnum, Double salary)
     {
         model.setRowCount(0);
         String currname = elist.get(edx).getName();
@@ -244,8 +247,13 @@ public class EmployeeMngScreen extends JFrame
         elist.get(edx).setAddress(addr);
         elist.get(edx).setName(name);
         elist.get(edx).setAge(age);
+        elist.get(edx).setSalary(salary);
         showTable(elist);
     }
+
+
+
+
 
     private class SortNameButtonListener implements ActionListener
     {
@@ -301,7 +309,7 @@ public class EmployeeMngScreen extends JFrame
         {
             try
             {
-                saveFile(elist,"2140/EmployeeCredentials.txt");
+                saveFile(elist,"EmployeeCredentials.dat");
                 JOptionPane.showMessageDialog(EScreen, "Changes have been saved!");
             }catch(Exception ex)
             {
@@ -311,7 +319,7 @@ public class EmployeeMngScreen extends JFrame
 
     }
 
-    public static void saveFile(ArrayList<Employee> empls, String file) 
+    public static void saveFile(ArrayList<Employee> proms, String file) 
     {
  
         File filename = new File(file);
@@ -324,9 +332,9 @@ public class EmployeeMngScreen extends JFrame
             fileWriter = new FileWriter(filename);
             bufferedWriter = new BufferedWriter(fileWriter);
  
-            for (Employee empl : empls) 
+            for (Employee prom : proms) 
             {
-                String line = empl.getUsername() + ";"+ empl.getPassword() + ";" + empl.getName() + ";" + empl.getIdNumber() + ";" + empl.getAge() + ";" + empl.getPosition() + ";" + empl.getPhoneNumber() + ";" + empl.getEmailAddress() + ";" + empl.getAddress() + ";" + empl.getSalary();
+                String line = prom.getName();
                 bufferedWriter.write(line);
                 bufferedWriter.newLine();
  

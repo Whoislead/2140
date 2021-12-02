@@ -12,6 +12,7 @@ public class EditEmployee extends JFrame
     //private JPasswordField  txtPassword;        //password
     private JTextField  txtIDNum;       //ID Number
     private JTextField  txtAge;        //age
+    private JTextField  txtSalary;        //salary
     private JTextField  txtPos;       //Position
     private JTextField  txtPhNum;        //Phone number
     private JTextField  txteAddr;       //email address
@@ -38,15 +39,18 @@ public class EditEmployee extends JFrame
         setTitle("Updating Employee Information...");
         pnlCommand = new JPanel();
         pnlDisplay = new JPanel();
-        pnlDisplay.add(new JLabel("Enter ID of Employee to be updated *: ")); 
+        pnlDisplay.add(new JLabel("Enter ID of Employee to be updated: ")); 
         txtIDNum = new JTextField(10);
         pnlDisplay.add(txtIDNum);
         pnlDisplay.add(new JLabel("Enter new name or leave blank to keep original name of Employee: "));
         txtName = new JTextField(10);
         pnlDisplay.add(txtName);
-        pnlDisplay.add(new JLabel("Enter new age or original age of Employee *: ")); 
+        pnlDisplay.add(new JLabel("Enter new age or original age of Employee: ")); 
         txtAge = new JTextField(20);
         pnlDisplay.add(txtAge);
+        pnlDisplay.add(new JLabel("Enter new Salary or original salary of Employee: ")); 
+        txtSalary = new JTextField(20);
+        pnlDisplay.add(txtSalary);
         pnlDisplay.add(new JLabel("Enter new address or leave blank to keep original address of Employee: ")); 
         txtAddr = new JTextField(20);
         pnlDisplay.add(txtAddr);
@@ -57,7 +61,7 @@ public class EditEmployee extends JFrame
         txtPhNum = new JTextField(20);
         pnlDisplay.add(txtPhNum);
         pnlDisplay.add(new JLabel("Required *"));
-        pnlDisplay.setLayout(new GridLayout(8,4));
+        pnlDisplay.setLayout(new GridLayout(10,4));
        
         cmdEdit      = new JButton("Edit/Update");
         cmdClose   = new JButton("Close");
@@ -76,7 +80,6 @@ public class EditEmployee extends JFrame
         add(pnlDisplay, BorderLayout.CENTER);
         add(pnlCommand, BorderLayout.SOUTH);
         pack();
-        setLocationRelativeTo(null);
         setVisible(true);
 
     }
@@ -99,22 +102,30 @@ public class EditEmployee extends JFrame
             String addr = txtAddr.getText();
             String eAddr = txteAddr.getText();
             String phNum = txtPhNum.getText();
+            String salary = txtSalary.getText();
             try
             {
                 int iage = Integer.valueOf(age);
-                int edx = eListing.findEmployee(IDnum);
-                if(edx >=0)
+                try
                 {
-                    int ans = JOptionPane.showConfirmDialog(EEScreen, "Are you sure you want to edit the information of Employee with ID#" +IDnum+ " ?", "Edit Employee?", 0);
-                    if(ans == 0)
+                    Double dsalary = Double.valueOf(salary);
+                    int edx = eListing.findEmployee(IDnum);
+                    if(edx >=0)
                     {
-                        eListing.updateEmployeeinfo(edx, name, iage, addr, eAddr, phNum);
-                        EEScreen.setVisible(false);
-                        JOptionPane.showMessageDialog(eListing, "Employee Information Updated!");
+                        int ans = JOptionPane.showConfirmDialog(EEScreen, "Are you sure you want to edit the information of Employee with ID#" +IDnum+ " ?", "Edit Employee?", 0);
+                        if(ans == 0)
+                        {
+                            eListing.updateEmployeeinfo(edx, name, iage, addr, eAddr, phNum, dsalary);
+                            EEScreen.setVisible(false);
+                            JOptionPane.showMessageDialog(eListing, "Employee Information Updated!");
+                        }
+                    }else
+                    {
+                        JOptionPane.showMessageDialog(EEScreen, "Employee with ID# " +IDnum+ " not found");
                     }
-                }else
+                }catch(NumberFormatException nfe)
                 {
-                    JOptionPane.showMessageDialog(EEScreen, "Employee with ID# " +IDnum+ " not found");
+                    JOptionPane.showMessageDialog(EEScreen, "Please ensure you have entered a valid salary");
                 }
             }catch (NumberFormatException nfe) 
             {
