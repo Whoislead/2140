@@ -34,23 +34,10 @@ public class Inventory {
 
   public String toString(){
     String result = this.Name + " has a quantity of  " + this.Quantity + " and is sold for " + this.Price() + "each";
-		return result;
+    return result;
   }
 
-  void createfile(){
-    try {
-    File obj = new File("Inventory.txt");
-    invent = obj.createNewFile(); 
-    if (invent) {
-      System.out.println("File has been created");
-      } else {
-        System.out.println("File already exists!");
-      }
-    } catch (IOException e) {
-      System.out.println("ERROR!");
-      e.printStackTrace();
-    }
-  }
+ 
 
   public boolean addItem(String itemname, int amount, double cost){
 
