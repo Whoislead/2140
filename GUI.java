@@ -65,6 +65,7 @@ public class GUI{
     manageEmployeeButtonListener mEMp = new manageEmployeeButtonListener();
     employeeMenuBack_ownerMenuBack emp_ownBack = new employeeMenuBack_ownerMenuBack();
     manageInventoryButtonListener mInv = new manageInventoryButtonListener();
+    orderButtonListener orderListener = new orderButtonListener();
 
     GUI(){
         mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -77,8 +78,7 @@ public class GUI{
         // customerDataButton.addActionListener(l);
         manageInventoryButton.addActionListener(mInv);
         manageEmployeeButton.addActionListener(mEMp);
-        
-
+        orderButton.addActionListener(orderListener);
 
 
         File efile = new File("2140/EmployeeCredentials.txt");
@@ -434,5 +434,14 @@ public class GUI{
             
         }
         
+    }
+
+    private class orderButtonListener implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            OrderorDeleteJFrame odmenu = new OrderorDeleteJFrame();
+            odmenu.show();
+        }
     }
 }

@@ -83,6 +83,7 @@ public class OrderorDeleteJFrame extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void orderBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orderBTActionPerformed
